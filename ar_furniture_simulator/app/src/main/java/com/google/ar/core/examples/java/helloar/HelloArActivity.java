@@ -171,7 +171,7 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
   private Texture virtualObjectAlbedoTexture;
   private Texture virtualObjectAlbedoInstantPlacementTexture;
 
-  private final List<WrappedAnchor> wrappedAnchors = new ArrayList<>();
+  private final List<WrappedAnchor> wrappedAnchors = new ArrayList();
 
   // Environmental HDR
   private Texture dfgTexture;
@@ -449,7 +449,7 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
       virtualObjectAlbedoTexture =
           Texture.createFromAsset(
               render,
-              "models/transparent.png",
+              "models/gl_color.png",
               Texture.WrapMode.CLAMP_TO_EDGE,
               Texture.ColorFormat.SRGB);
       virtualObjectAlbedoInstantPlacementTexture =
@@ -689,7 +689,7 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
             || (trackable instanceof DepthPoint)) {
           // Cap the number of objects created. This avoids overloading both the
           // rendering system and ARCore.
-          if (wrappedAnchors.size() >= 20) {
+          if (wrappedAnchors.size() >= 1) {
             wrappedAnchors.get(0).getAnchor().detach();
             wrappedAnchors.remove(0);
           }

@@ -1,4 +1,4 @@
-package com.example.project123;
+package com.google.ar.core.examples.java.common.cubecreater;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
