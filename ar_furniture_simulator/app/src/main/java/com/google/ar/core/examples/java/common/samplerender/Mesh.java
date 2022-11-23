@@ -26,11 +26,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
+import com.google.ar.core.examples.java.helloar.HelloArActivity;
 /**
  * A collection of vertices, faces, and other attributes that define how to render a 3D object.
  *
- * <p>To render the mesh, use {@link SampleRender#draw()}.
+ * <p>To render the mesh, use .
  */
 public class Mesh implements Closeable {
   private static final String TAG = Mesh.class.getSimpleName();
@@ -131,11 +131,19 @@ public class Mesh implements Closeable {
     try (InputStream inputStream = render.getAssets().open(assetFileName)) {
       Obj obj = ObjUtils.convertToRenderable(ObjReader.read(inputStream));
 
+
       // Obtain the data from the OBJ, as direct buffers:
       IntBuffer vertexIndices = ObjData.getFaceVertexIndices(obj, /*numVerticesPerFace=*/ 3);
       FloatBuffer localCoordinates = ObjData.getVertices(obj);
       FloatBuffer textureCoordinates = ObjData.getTexCoords(obj, /*dimensions=*/ 2);
       FloatBuffer normals = ObjData.getNormals(obj);
+
+      localCoordinates.clear();
+      localCoordinates.put(HelloArActivity.vertices);
+      vertexIndices.clear();
+      vertexIndices.put(HelloArActivity.indices);
+      normals.clear();
+      normals.put(HelloArActivity.normals);
 
       VertexBuffer[] vertexBuffers = {
         new VertexBuffer(render, 3, localCoordinates),
@@ -145,7 +153,7 @@ public class Mesh implements Closeable {
 
       IndexBuffer indexBuffer = new IndexBuffer(render, vertexIndices);
 
-      return new Mesh(render, Mesh.PrimitiveMode.TRIANGLES, indexBuffer, vertexBuffers);
+      return new Mesh(render, PrimitiveMode.TRIANGLES, indexBuffer, vertexBuffers);
     }
   }
 

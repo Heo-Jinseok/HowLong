@@ -17,6 +17,7 @@
 package com.google.ar.core.examples.java.helloar;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.media.Image;
 import android.opengl.GLES30;
@@ -79,6 +80,7 @@ import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableSdkTooOldException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -187,43 +189,61 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
   private final float[] viewInverseMatrix = new float[16];
   private final float[] worldLightDirection = {0.0f, 0.0f, 0.0f, 0.0f};
   private final float[] viewLightDirection = new float[4]; // view x world light direction
-
+  public static int wid1,dep1,hei1;
   Button button;
+  public static float[] vertices;
+  public static float[] normals =
+          {
+                  0.000000f,-1.000000f, 0.000000f,
+                  0.000000f, 1.000000f, 0.000000f,
+                  1.000000f, 0.000000f, 0.000000f,
+                  -0.000000f, 0.000000f, 1.000000f,
+                  -1.000000f, -0.000000f, -0.000000f,
+                  0.000000f,0.000000f ,-1.000000f,
+          };
 
-  private final float[] cubeCoords = {
-          -0.5f, 0.5f, -0.5f,
+  public static int indices[] =
+          {
+                  0,3,1,  1,3,2,
 
-          0.5f, 0.5f, -0.5f,
+                  1,2,6,  1,6,5,
 
-          0.5f, -0.5f, -0.5f,
+                  0,1,4,  1,5,4,
 
-          -0.5f, -0.5f, -0.5f,
+                  4,5,7,  7,5,6,
 
-          -0.5f, 0.5f, 0.5f,
+                  0,4,7,  0,7,3,
 
-          0.5f, 0.5f, 0.5f,
+                  3,7,2,  2,7,6,
 
-          0.5f, -0.5f, 0.5f,
-
-          -0.5f, -0.5f, 0.5f,
-  };
-  private final int[] indice = {
-          0, 3, 1,  1, 3, 2,
-
-          1, 2, 6,  1, 6, 5,
-
-          0, 1, 4,  1, 5, 4,
-
-          4, 5, 7,  7, 5, 6,
-
-          0, 4, 7,  0, 7, 3,
-
-          3, 7, 2,  2, 7, 6,
-  };
+          };
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Intent intent = getIntent();
+    Bundle bundle = intent.getExtras();
+    String width = bundle.getString("width");
+    String depth = bundle.getString("depth");
+    String height = bundle.getString("height");
+    try {
+      wid1 = Integer.parseInt(width);
+      dep1 = Integer.parseInt(depth);
+      hei1 = Integer.parseInt(height);
+    } catch (NumberFormatException ex) {
+      ex.printStackTrace();
+    }
+    vertices =
+            new float[]{
+                    wid1 * 0.0005f, hei1 * 0f, -dep1 * 0.0005f,
+                    wid1 * 0.0005f, hei1 * 0.001f, -dep1 * 0.0005f,
+                    -wid1 * 0.0005f, hei1 * 0.001f, -dep1 * 0.0005f,
+                    -wid1 * 0.0005f, hei1 * 0f, -dep1 * 0.0005f,
+                    wid1 * 0.0005f, hei1 * 0f, dep1 * 0.0005f,
+                    wid1 * 0.0005f, hei1 * 0.001f, dep1 * 0.0005f,
+                    -wid1 * 0.0005f, hei1 * 0.001f, dep1 * 0.0005f,
+                    -wid1 * 0.0005f, hei1 * 0, dep1 * 0.0005f,
+            };
     setContentView(R.layout.activity_main);
     surfaceView = findViewById(R.id.surfaceview);
     displayRotationHelper = new DisplayRotationHelper(/*context=*/ this);
@@ -345,6 +365,8 @@ public class HelloArActivity extends AppCompatActivity implements SampleRender.R
       session = null;
       return;
     }
+
+
 
     surfaceView.onResume();
     displayRotationHelper.onResume();
