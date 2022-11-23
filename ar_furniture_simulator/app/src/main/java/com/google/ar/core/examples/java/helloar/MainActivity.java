@@ -44,6 +44,17 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 Intent intent1 = new Intent(getApplicationContext(), HelloArActivity.class);
+                EditText editPhone1 = (EditText) findViewById(R.id.ww);
+                EditText editPhone2 = (EditText) findViewById(R.id.dd);
+                EditText editPhone3 = (EditText) findViewById(R.id.hh);
+                String width = editPhone1.getText().toString();
+                String depth = editPhone2.getText().toString();
+                String height = editPhone3.getText().toString();
+                Bundle bd1 = new Bundle();
+                bd1.putString("width",width);
+                bd1.putString("depth",depth);
+                bd1.putString("height",height);
+                intent1.putExtras(bd1);
                 startActivity(intent1);
             }
         });
